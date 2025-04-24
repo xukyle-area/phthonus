@@ -1,9 +1,13 @@
 package com.gantenx.phthonus.kafka;
 
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.errors.TopicExistsException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Duration;
@@ -11,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -27,12 +32,35 @@ public class KafkaMessageViewer {
     private final static boolean WAIT_FOR_MESSAGES = true;
 
     public static void main(String[] args) {
-        String bootstrapServers = "10.251.90.163:9092";
+
+//        String bootstrapServers = "10.251.90.163:9092";
+        String bootstrapServers = "yax-dt2-sandbox01-kafka-main0-1.exodushk.com:9092";
 //        String topic = "dormantAccount_e";
-        String topic = "ongoing_cdd_e";
-        KafkaMessageViewer.viewKafkaMessages(bootstrapServers, topic);
+//        String topic = "ongoing_cdd_e";
+//        String topic = "preOpenAccount_e";
+        String topic = "preUserRuleScore_e";
+        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers,  "preUserRuleScore_e", 3, (short) 1);
+        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers,  "preOpenAccount_e", 3, (short) 1);
     }
 
+    public static void createTopicIfNotExists(String bootstrapServers, String topic, int numPartitions, short replicationFactor) {
+        Properties props = new Properties();
+        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+
+        try (AdminClient adminClient = AdminClient.create(props)) {
+            NewTopic newTopic = new NewTopic(topic, numPartitions, replicationFactor);
+            adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
+            System.out.println("成功创建 Kafka Topic: " + topic);
+        } catch (ExecutionException e) {
+            if (e.getCause() instanceof TopicExistsException) {
+                System.out.println("Topic 已存在: " + topic);
+            } else {
+                throw new RuntimeException("创建 Topic 失败: " + topic, e);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("创建 Topic 失败: " + topic, e);
+        }
+    }
     /**
      * 查询并显示Kafka消息
      */
