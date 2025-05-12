@@ -2,9 +2,6 @@ package com.gantenx.phthonus.socket.client;
 
 import com.gantenx.phthonus.common.MARKET;
 import com.gantenx.phthonus.common.ScheduledThreadPool;
-import com.gantenx.phthonus.socket.binance.BinanceSocketClient;
-import com.gantenx.phthonus.socket.cryptocom.CryptoSocketClient;
-import com.gantenx.phthonus.socket.service.RefreshTask;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URISyntaxException;
@@ -25,19 +22,21 @@ public class SocketTask {
 
     public void scheduleConnect() {
         ScheduledThreadPool.scheduleWithFixedDelay(this::checkAndReconnect, CHECK_INITIAL_DELAY, CHECK_FIXED_DELAY, TimeUnit.SECONDS);
-        ScheduledThreadPool.scheduleWithFixedDelay(() -> {
-            if (curClient != null && curClient.isOpen()) {
-                RefreshTask.run(curClient::send, type);
-            } else {
-                log.info("websocket of {} is not open", type);
-            }
-        }, SUBSCRIPTION_INITIAL_DELAY, SUBSCRIPTION_FIXED_DELAY, TimeUnit.SECONDS);
+        ScheduledThreadPool.scheduleWithFixedDelay(this::checkAndSubscription, SUBSCRIPTION_INITIAL_DELAY, SUBSCRIPTION_FIXED_DELAY, TimeUnit.SECONDS);
     }
 
     private void checkAndReconnect() {
         if (curClient == null || !curClient.isOpen()) {
             reconnect();
         }
+    }
+
+    private void checkAndSubscription() {
+        if (curClient == null || !curClient.isOpen()) {
+            log.error("websocket of {} is not open", type);
+            return;
+        }
+        curClient.subscription();
     }
 
     public synchronized void reconnect() {
@@ -49,7 +48,7 @@ public class SocketTask {
             } else if (type.equals(MARKET.MARKET_CRYPTO_COM)) {
                 nextClient = new CryptoSocketClient();
             } else {
-                log.error("Unsupported QuoteEnum type: " + type);
+                log.error("Unsupported QuoteEnum type: {}", type);
                 return;
             }
         } catch (URISyntaxException e) {
@@ -64,7 +63,7 @@ public class SocketTask {
             nextClient.connect();
             curClient = nextClient;
         } catch (Exception e) {
-            log.error("Error reconnecting: " + e.getMessage(), e);
+            log.error("Error reconnecting: {}", e.getMessage(), e);
         }
     }
 }

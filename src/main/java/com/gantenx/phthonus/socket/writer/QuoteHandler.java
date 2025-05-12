@@ -3,7 +3,7 @@ package com.gantenx.phthonus.socket.writer;
 
 import com.gantenx.phthonus.common.ApiWebClientFactory;
 import com.gantenx.phthonus.common.MARKET;
-import com.gantenx.phthonus.socket.service.CurrencyService;
+import com.gantenx.phthonus.socket.cache.SymbolCache;
 import com.gantenx.phthonus.common.TimestampUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -49,7 +49,7 @@ public class QuoteHandler {
                 JSONObject candle = data.getJSONObject(data.length() - 3 + i);
                 long time = candle.getLong("t");
                 if (time == TimestampUtils.midnightTimestampBefore(2 - i)) {
-                    Long contractId = CurrencyService.getIdBySymbol(USDTUSD);
+                    Long contractId = SymbolCache.getIdBySymbol(USDTUSD);
                     QuoteWriter.DayHistoryQuote quote = new QuoteWriter.DayHistoryQuote(time, contractId, MARKET.MARKET_CRYPTO_COM, candle.getString("c"));
                     dynamodbWriter.updateDayHistoryQuote(quote);
                     log.info("save 1d crypto quote success, dayHistoryQuote:{}", quote);
@@ -74,7 +74,7 @@ public class QuoteHandler {
             return;
         }
         log.info("handleBinanceHistory start");
-        CurrencyService.getContractMap().forEach((symbol, id) -> {
+        SymbolCache.getContractMap().forEach((symbol, id) -> {
             try {
                 Request request = new Request.Builder().url(BINANCE_CANDLE_URL + symbol).get().build();
                 String body = Objects.requireNonNull(client.newCall(request).execute().body()).string();
