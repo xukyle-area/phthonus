@@ -1,6 +1,6 @@
 package com.gantenx.phthonus.socket.writer;
 
-import com.gantenx.phthonus.common.MARKET;
+import com.gantenx.phthonus.common.Market;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class QuoteWriter {
         private long timestamp;
         private long contractId;
         @NotNull
-        private MARKET market;
+        private Market market;
         @NotNull
         private String last;
         private String ask;
@@ -37,7 +37,7 @@ public class QuoteWriter {
         private long timestamp;
         private long contractId;
         @NotNull
-        private MARKET market;
+        private Market market;
         @NotNull
         private String preClose;
     }

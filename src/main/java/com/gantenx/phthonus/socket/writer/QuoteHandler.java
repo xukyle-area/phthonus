@@ -2,7 +2,7 @@ package com.gantenx.phthonus.socket.writer;
 
 
 import com.gantenx.phthonus.common.ApiWebClientFactory;
-import com.gantenx.phthonus.common.MARKET;
+import com.gantenx.phthonus.common.Market;
 import com.gantenx.phthonus.socket.cache.SymbolCache;
 import com.gantenx.phthonus.common.TimestampUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +26,13 @@ public class QuoteHandler {
     private static final OkHttpClient client = ApiWebClientFactory.getSharedClient();
     private static final String USDTUSD = "USDTUSD";
     private static final QuoteWriter dynamodbWriter = new QuoteWriter();
-    private static final Map<MARKET, Long> executeRecordMap = new HashMap<>();
+    private static final Map<Market, Long> executeRecordMap = new HashMap<>();
 
     /**
      * https://exchange-docs.crypto.com/spot/index.html#ticker-instrument_name
      */
     public static void handleCryptoHistory() {
-        Long lastExecuteTime = executeRecordMap.getOrDefault(MARKET.MARKET_CRYPTO_COM, 0L);
+        Long lastExecuteTime = executeRecordMap.getOrDefault(Market.CRYPTO_COM, 0L);
         log.info("lastExecuteTime:{}", lastExecuteTime);
         if (QuoteHandler.isAfter1amUTC(lastExecuteTime)) {
             log.info("the task has been executed, lastExecuteTime:{}", lastExecuteTime);
@@ -50,14 +50,14 @@ public class QuoteHandler {
                 long time = candle.getLong("t");
                 if (time == TimestampUtils.midnightTimestampBefore(2 - i)) {
                     Long contractId = SymbolCache.getIdBySymbol(USDTUSD);
-                    QuoteWriter.DayHistoryQuote quote = new QuoteWriter.DayHistoryQuote(time, contractId, MARKET.MARKET_CRYPTO_COM, candle.getString("c"));
+                    QuoteWriter.DayHistoryQuote quote = new QuoteWriter.DayHistoryQuote(time, contractId, Market.CRYPTO_COM, candle.getString("c"));
                     dynamodbWriter.updateDayHistoryQuote(quote);
                     log.info("save 1d crypto quote success, dayHistoryQuote:{}", quote);
                 } else {
                     log.error("handle crypto dayHistoryQuote error.");
                 }
             }
-            executeRecordMap.put(MARKET.MARKET_CRYPTO_COM, System.currentTimeMillis());
+            executeRecordMap.put(Market.CRYPTO_COM, System.currentTimeMillis());
         } catch (Exception e) {
             log.error("error during handle history quote.", e);
         }
@@ -67,7 +67,7 @@ public class QuoteHandler {
      * https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
      */
     public static void handleBinanceHistory() {
-        Long lastExecuteTime = executeRecordMap.getOrDefault(MARKET.MARKET_BINANCE, 0L);
+        Long lastExecuteTime = executeRecordMap.getOrDefault(Market.BINANCE, 0L);
         log.info("lastExecuteTime:{}", lastExecuteTime);
         if (QuoteHandler.isAfter1amUTC(lastExecuteTime)) {
             log.info("the task has been executed, lastExecuteTime:{}", lastExecuteTime);
@@ -83,7 +83,7 @@ public class QuoteHandler {
                     JSONArray candle = new JSONArray(body).getJSONArray(i);
                     long time = candle.getLong(0);
                     if (time == TimestampUtils.midnightTimestampBefore(2 - i)) {
-                        QuoteWriter.DayHistoryQuote quote = new QuoteWriter.DayHistoryQuote(time, id, MARKET.MARKET_BINANCE, candle.getString(4));
+                        QuoteWriter.DayHistoryQuote quote = new QuoteWriter.DayHistoryQuote(time, id, Market.BINANCE, candle.getString(4));
                         dynamodbWriter.updateDayHistoryQuote(quote);
                         log.info("save 1d crypto quote success, quote:{}", quote);
                     } else {
@@ -94,7 +94,7 @@ public class QuoteHandler {
                 log.error("error during handle history quote.", e);
             }
         });
-        executeRecordMap.put(MARKET.MARKET_BINANCE, System.currentTimeMillis());
+        executeRecordMap.put(Market.BINANCE, System.currentTimeMillis());
     }
 
     /**

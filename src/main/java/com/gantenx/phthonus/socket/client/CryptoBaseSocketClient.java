@@ -2,7 +2,7 @@ package com.gantenx.phthonus.socket.client;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gantenx.phthonus.common.MARKET;
+import com.gantenx.phthonus.common.Market;
 import com.gantenx.phthonus.common.model.Symbol;
 import com.gantenx.phthonus.socket.cache.SymbolCache;
 import com.gantenx.phthonus.socket.cryptocom.CryptoEvent;
@@ -18,22 +18,24 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 @Slf4j
-public class CryptoSocketClient extends AbstractSocketClient {
+public class CryptoBaseSocketClient extends BaseSocketClient {
 
-    private final static String CRYPTO_URL = "wss://stream.crypto.com/v2/market";
+    private final static String URL = "wss://stream.crypto.com/v2/market";
+    private final static String SUBSCRIBE = "subscribe";
+    private final static String CHANNELS = "channels";
 
-    public CryptoSocketClient() throws URISyntaxException {
-        super(CRYPTO_URL);
+    public CryptoBaseSocketClient() throws URISyntaxException {
+        super(URL);
     }
 
     @Override
     public void onMessage(String message) {
         if (message.contains("public/heartbeat")) {
             try {
-                CryptoRequest request = objectMapper.readValue(message, CryptoRequest.class);
+                CryptoRequest request = mapper.readValue(message, CryptoRequest.class);
                 request.setMethod("public/respond-heartbeat");
                 request.setNonce(System.currentTimeMillis());
-                this.send(objectMapper.writeValueAsString(request));
+                this.send(mapper.writeValueAsString(request));
             } catch (JsonProcessingException e) {
                 log.info("handle heartbeat exception, message:{}", message, e);
             }
@@ -43,17 +45,17 @@ public class CryptoSocketClient extends AbstractSocketClient {
     }
 
     @Override
-    protected Consumer<String> getApiCallback() {
+    protected Consumer<String> getCallback() {
         return text -> {
             try {
-                CryptoEvent cryptoEvent = objectMapper.readValue(text, CryptoEvent.class);
+                CryptoEvent cryptoEvent = mapper.readValue(text, CryptoEvent.class);
                 CryptoEvent.Dat data = cryptoEvent.getResult().getData()[0];
                 String symbol = cryptoEvent.getResult().getSubscription();
                 long contractId = SymbolCache.getIdBySymbol(symbol.split("ticker.")[1].replace("_", ""));
                 QuoteWriter.RealTimeQuote realTimeQuote =
-                        new QuoteWriter.RealTimeQuote(System.currentTimeMillis(), contractId, MARKET.MARKET_CRYPTO_COM,
+                        new QuoteWriter.RealTimeQuote(System.currentTimeMillis(), contractId, Market.CRYPTO_COM,
                                 data.getLast(), data.getAsk(), data.getBid());
-                quoteWriter.updateRealTimeQuote(realTimeQuote);
+                writer.updateRealTimeQuote(realTimeQuote);
             } catch (Exception e) {
                 log.error("error during sink.{}", text, e);
             }
@@ -68,8 +70,8 @@ public class CryptoSocketClient extends AbstractSocketClient {
                 String x = "ticker." + s.getBase() + "_" + s.getQuote();
                 channels.add(x);
             }
-            Map<String, Object> channelsMap = Collections.singletonMap(CRYPTO_CHANNELS, channels);
-            CryptoRequest request = new CryptoRequest(id++, CRYPTO_COM_SUBSCRIBE, channelsMap, System.currentTimeMillis());
+            Map<String, Object> channelsMap = Collections.singletonMap(CHANNELS, channels);
+            CryptoRequest request = new CryptoRequest(id++, SUBSCRIBE, channelsMap, System.currentTimeMillis());
             return mapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

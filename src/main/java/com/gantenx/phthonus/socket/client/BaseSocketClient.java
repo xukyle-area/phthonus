@@ -15,21 +15,17 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 @Slf4j
-public abstract class AbstractSocketClient extends WebSocketClient {
+public abstract class BaseSocketClient extends WebSocketClient {
 
-    protected static final ObjectMapper objectMapper = new ObjectMapper();
-    protected static final QuoteWriter quoteWriter = new QuoteWriter();
     protected static final ObjectMapper mapper = new ObjectMapper();
-    protected final static String BINANCE_SUBSCRIBE = "SUBSCRIBE";
-    protected final static String CRYPTO_COM_SUBSCRIBE = "subscribe";
-    protected final static String CRYPTO_CHANNELS = "channels";
+    protected static final QuoteWriter writer = new QuoteWriter();
     protected static long id = 1L;
 
     static {
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public AbstractSocketClient(String serverUri) throws URISyntaxException {
+    public BaseSocketClient(String serverUri) throws URISyntaxException {
         super(new URI(serverUri));
     }
 
@@ -49,21 +45,20 @@ public abstract class AbstractSocketClient extends WebSocketClient {
         log.error("WebSocket连接发生错误...", ex);
     }
 
-    protected abstract Consumer<String> getApiCallback();
+    @Override
+    public void onMessage(String message) {
+        Consumer<String> callback = this.getCallback();
+        callback.accept(message);
+    }
 
+    protected abstract Consumer<String> getCallback();
+
+    protected abstract String buildSubscription(Set<Symbol> symbols);
 
     public void subscription() {
         Set<Symbol> symbols = SymbolCache.getSymbolsMap().keySet();
         String subscription = buildSubscription(symbols);
         log.info("WebSocket 订阅消息: {}", subscription);
         this.send(subscription);
-    }
-
-    protected abstract String buildSubscription(Set<Symbol> symbols);
-
-    @Override
-    public void onMessage(String message) {
-        Consumer<String> callback = this.getApiCallback();
-        callback.accept(message);
     }
 }

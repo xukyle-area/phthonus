@@ -2,7 +2,7 @@ package com.gantenx.phthonus.socket.client;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gantenx.phthonus.common.MARKET;
+import com.gantenx.phthonus.common.Market;
 import com.gantenx.phthonus.common.model.Symbol;
 import com.gantenx.phthonus.socket.binance.BinanceEvent;
 import com.gantenx.phthonus.socket.binance.BinanceRequest;
@@ -18,27 +18,26 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 @Slf4j
-public class BinanceSocketClient extends AbstractSocketClient {
+public class BinanceBaseSocketClient extends BaseSocketClient {
 
-    //    private static final String BINANCE_URL = "wss://stream.binance.com:443/stream";
-    private static final String BINANCE_URL = "wss://stream.binance.com:9443/stream";
+    private static final String BINANCE_URL = "wss://stream.binance.com:443/stream";
+    private final static String BINANCE_SUBSCRIBE = "SUBSCRIBE";
 
-    public BinanceSocketClient() throws URISyntaxException {
+    public BinanceBaseSocketClient() throws URISyntaxException {
         super(BINANCE_URL);
     }
 
     @Override
-    protected Consumer<String> getApiCallback() {
+    protected Consumer<String> getCallback() {
         return text -> {
             try {
-                BinanceEvent binanceEvent = objectMapper.readValue(text, BinanceEvent.class);
+                BinanceEvent binanceEvent = mapper.readValue(text, BinanceEvent.class);
                 BinanceTicker data = binanceEvent.getData();
                 String symbol = data.getSymbol();
                 long contractId = SymbolCache.getIdBySymbol(symbol);
-                QuoteWriter.RealTimeQuote realTimeQuote =
-                        new QuoteWriter.RealTimeQuote(data.getEventTime(), contractId, MARKET.MARKET_BINANCE,
+                QuoteWriter.RealTimeQuote realTimeQuote = new QuoteWriter.RealTimeQuote(data.getEventTime(), contractId, Market.BINANCE,
                                 data.getLastTradedPrice(), data.getBestAskPrice(), data.getBestBidPrice());
-                quoteWriter.updateRealTimeQuote(realTimeQuote);
+                writer.updateRealTimeQuote(realTimeQuote);
             } catch (Exception e) {
                 log.error("error during sink.{}", text, e);
             }
