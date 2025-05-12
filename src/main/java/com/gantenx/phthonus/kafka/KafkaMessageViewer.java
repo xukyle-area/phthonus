@@ -32,15 +32,16 @@ public class KafkaMessageViewer {
     private final static boolean WAIT_FOR_MESSAGES = true;
 
     public static void main(String[] args) {
-
 //        String bootstrapServers = "10.251.90.163:9092";
-        String bootstrapServers = "yax-dt2-sandbox01-kafka-main0-1.exodushk.com:9092";
 //        String topic = "dormantAccount_e";
 //        String topic = "ongoing_cdd_e";
+//        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers,  "preUserRuleScore_e", 3, (short) 1);
+//        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers,  "preOpenAccount_e", 3, (short) 1);
+        // 开户
+        String bootstrapServers = "yax-dt2-sandbox01-kafka-main0-1.exodushk.com:9092";
 //        String topic = "preOpenAccount_e";
         String topic = "preUserRuleScore_e";
-        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers,  "preUserRuleScore_e", 3, (short) 1);
-        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers,  "preOpenAccount_e", 3, (short) 1);
+        viewKafkaMessages(bootstrapServers, topic);
     }
 
     public static void createTopicIfNotExists(String bootstrapServers, String topic, int numPartitions, short replicationFactor) {

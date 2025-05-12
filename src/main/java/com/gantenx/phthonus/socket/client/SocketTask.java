@@ -1,5 +1,7 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.socket.client;
 
+import com.gantenx.phthonus.common.MARKET;
+import com.gantenx.phthonus.common.ScheduledThreadPool;
 import com.gantenx.phthonus.socket.binance.BinanceSocketClient;
 import com.gantenx.phthonus.socket.cryptocom.CryptoSocketClient;
 import com.gantenx.phthonus.socket.service.RefreshTask;

@@ -1,10 +1,10 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.common;
 
 public enum MARKET {
     MARKET_UNSPECIFIED(0),
     MARKET_BINANCE(1),
     MARKET_FTX(2),
-    MARKET_EXODUS(3),
+    MARKET_SELF(3),
     MARKET_CRYPTO_COM(4),
     MARKET_TIGR(5),
     UNRECOGNIZED(-1);
@@ -38,7 +38,7 @@ public enum MARKET {
             case 2:
                 return MARKET_FTX;
             case 3:
-                return MARKET_EXODUS;
+                return MARKET_SELF;
             case 4:
                 return MARKET_CRYPTO_COM;
             case 5:

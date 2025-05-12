@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.socket.utils;
+package com.gantenx.phthonus.common;
 
 public class TimestampUtils {
     public static final long MILLIS_OF_ONE_DAY = 24 * 60 * 60 * 1000;

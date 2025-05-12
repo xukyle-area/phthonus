@@ -1,9 +1,9 @@
 package com.gantenx.phthonus.socket.cryptocom;
 
-import com.gantenx.phthonus.socket.MARKET;
-import com.gantenx.phthonus.socket.QuoteHandler;
-import com.gantenx.phthonus.socket.ScheduledThreadPool;
-import com.gantenx.phthonus.socket.SocketTask;
+import com.gantenx.phthonus.common.MARKET;
+import com.gantenx.phthonus.socket.writer.QuoteHandler;
+import com.gantenx.phthonus.common.ScheduledThreadPool;
+import com.gantenx.phthonus.socket.client.SocketTask;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;

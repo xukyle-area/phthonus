@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.socket.client;
 
 @FunctionalInterface
 public interface ApiCallback {

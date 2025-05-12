@@ -1,7 +1,7 @@
 package com.gantenx.phthonus.socket.service;
 
-import com.gantenx.phthonus.socket.ApiWebClientFactory;
-import com.gantenx.phthonus.socket.utils.SymbolUtils;
+import com.gantenx.phthonus.common.ApiWebClientFactory;
+import com.gantenx.phthonus.common.SymbolUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;

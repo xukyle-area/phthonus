@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.socket.utils;
+package com.gantenx.phthonus.common;
 
 public class SymbolUtils {
 

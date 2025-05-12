@@ -2,9 +2,9 @@ package com.gantenx.phthonus.socket.cryptocom;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.gantenx.phthonus.socket.AbstractSocketClient;
-import com.gantenx.phthonus.socket.ApiCallback;
-import com.gantenx.phthonus.socket.MARKET;
+import com.gantenx.phthonus.socket.client.AbstractSocketClient;
+import com.gantenx.phthonus.socket.client.ApiCallback;
+import com.gantenx.phthonus.common.MARKET;
 import com.gantenx.phthonus.socket.service.CurrencyService;
 import com.gantenx.phthonus.socket.writer.QuoteWriter;
 import lombok.extern.slf4j.Slf4j;

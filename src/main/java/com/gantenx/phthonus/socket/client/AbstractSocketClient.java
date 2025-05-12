@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.socket.client;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

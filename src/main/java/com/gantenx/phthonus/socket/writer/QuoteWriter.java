@@ -1,6 +1,6 @@
 package com.gantenx.phthonus.socket.writer;
 
-import com.gantenx.phthonus.socket.MARKET;
+import com.gantenx.phthonus.common.MARKET;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

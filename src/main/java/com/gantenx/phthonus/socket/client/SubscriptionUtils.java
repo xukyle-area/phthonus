@@ -1,9 +1,9 @@
-package com.gantenx.phthonus.socket.utils;
+package com.gantenx.phthonus.socket.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.gantenx.phthonus.socket.MARKET;
+import com.gantenx.phthonus.common.MARKET;
 import com.gantenx.phthonus.socket.binance.BinanceRequest;
 import com.gantenx.phthonus.socket.cryptocom.CryptoRequest;
 import com.gantenx.phthonus.socket.service.CurrencyService;

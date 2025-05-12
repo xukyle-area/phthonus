@@ -1,9 +1,10 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.socket.writer;
 
 
+import com.gantenx.phthonus.common.ApiWebClientFactory;
+import com.gantenx.phthonus.common.MARKET;
 import com.gantenx.phthonus.socket.service.CurrencyService;
-import com.gantenx.phthonus.socket.utils.TimestampUtils;
-import com.gantenx.phthonus.socket.writer.QuoteWriter;
+import com.gantenx.phthonus.common.TimestampUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.gantenx.phthonus.socket.utils.TimestampUtils.MILLIS_OF_ONE_HOUR;
+import static com.gantenx.phthonus.common.TimestampUtils.MILLIS_OF_ONE_HOUR;
 
 
 @Slf4j

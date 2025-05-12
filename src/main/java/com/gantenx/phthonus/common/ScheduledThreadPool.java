@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.common;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

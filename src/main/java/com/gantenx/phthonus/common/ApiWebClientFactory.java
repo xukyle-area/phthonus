@@ -1,5 +1,6 @@
-package com.gantenx.phthonus.socket;
+package com.gantenx.phthonus.common;
 
+import lombok.Getter;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 
@@ -9,6 +10,7 @@ public final class ApiWebClientFactory {
 
     private ApiWebClientFactory() {}
 
+    @Getter
     private static final OkHttpClient sharedClient;
 
     static {
@@ -20,10 +22,4 @@ public final class ApiWebClientFactory {
                 .pingInterval(20, TimeUnit.SECONDS)
                 .build();
     }
-
-    public static OkHttpClient getSharedClient() {
-        return sharedClient;
-    }
-
-
 }

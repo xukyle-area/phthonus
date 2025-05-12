@@ -1,9 +1,9 @@
 package com.gantenx.phthonus.socket.binance;
 
 
-import com.gantenx.phthonus.socket.AbstractSocketClient;
-import com.gantenx.phthonus.socket.ApiCallback;
-import com.gantenx.phthonus.socket.MARKET;
+import com.gantenx.phthonus.socket.client.AbstractSocketClient;
+import com.gantenx.phthonus.socket.client.ApiCallback;
+import com.gantenx.phthonus.common.MARKET;
 import com.gantenx.phthonus.socket.service.CurrencyService;
 import com.gantenx.phthonus.socket.writer.QuoteWriter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,8 @@ import java.net.URISyntaxException;
 public class BinanceSocketClient extends AbstractSocketClient {
 
 //    private static final String BINANCE_URL = "wss://proxy-binance-stream.yax.tech/stream";
-    private static final String BINANCE_URL = "wss://stream.binance.com:443/stream";
+//    private static final String BINANCE_URL = "wss://stream.binance.com:443/stream";
+    private static final String BINANCE_URL = "wss://stream.binance.com:9443/stream";
 
     public BinanceSocketClient() throws URISyntaxException {
         super(BINANCE_URL);
