@@ -17,6 +17,10 @@ public class BinanceHandler extends HistoryQuoteHandler {
 
     private static final String BINANCE_CANDLE_URL = "https://proxy-binance-api.yax.tech/api/v3/klines?interval=1d&limit=3&symbol=";
 
+    public BinanceHandler() {
+        super();
+    }
+
     @Override
     public void handleHistory() {
         Long lastExecuteTime = executeRecordMap.getOrDefault(Market.BINANCE, 0L);

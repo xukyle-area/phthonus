@@ -20,6 +20,11 @@ public abstract class HistoryQuoteHandler {
     protected static final QuoteWriter writer = new QuoteWriter();
     protected static final Map<Market, Long> executeRecordMap = new HashMap<>();
 
+
+    public HistoryQuoteHandler() {
+        this.scheduleConnect();
+    }
+
     /**
      * 判断给定的时间戳是否在当天的1am UTC之后
      *

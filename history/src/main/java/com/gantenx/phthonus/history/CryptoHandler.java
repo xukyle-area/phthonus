@@ -17,6 +17,10 @@ public class CryptoHandler extends HistoryQuoteHandler {
     private static final String CRYPTO_CANDLE_URL = "https://api.crypto.com/v2/public/get-candlestick?instrument_name=USDT_USD&timeframe=1d";
     private static final String USDT_USD = "USDT.USD";
 
+    public CryptoHandler() {
+        super();
+    }
+
     @Override
     public void handleHistory() {
         Long lastExecuteTime = executeRecordMap.getOrDefault(Market.CRYPTO_COM, 0L);

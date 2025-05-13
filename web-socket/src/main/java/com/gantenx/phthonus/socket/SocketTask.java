@@ -16,9 +16,6 @@ public class SocketTask {
 
     public SocketTask(Market type) {
         this.type = type;
-    }
-
-    public void scheduleConnect() {
         ThreadPool.scheduleWithFixedDelay(this::checkAndHandle, INITIAL_DELAY, FIXED_DELAY, TimeUnit.SECONDS);
     }
 
