@@ -3,13 +3,16 @@ package com.gantenx.phthonus.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gantenx.phthonus.infrastructure.commons.enums.Market;
-import com.gantenx.phthonus.infrastructure.commons.model.*;
+import com.gantenx.phthonus.infrastructure.commons.enums.Symbol;
+import com.gantenx.phthonus.infrastructure.commons.model.BinanceEvent;
+import com.gantenx.phthonus.infrastructure.commons.model.BinanceRequest;
+import com.gantenx.phthonus.infrastructure.commons.model.BinanceTicker;
+import com.gantenx.phthonus.infrastructure.commons.model.RealTimeQuote;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -29,7 +32,8 @@ public class BinanceBaseSocketClient extends BaseSocketClient {
                 BinanceEvent binanceEvent = mapper.readValue(text, BinanceEvent.class);
                 BinanceTicker data = binanceEvent.getData();
                 String symbol = data.getSymbol();
-                RealTimeQuote realTimeQuote = new RealTimeQuote(symbol, data.getEventTime(), Market.BINANCE,
+                Symbol symbolEnum = Symbol.findBySymbolWithoutDot(symbol);
+                RealTimeQuote realTimeQuote = new RealTimeQuote(symbolEnum, data.getEventTime(), Market.BINANCE,
                                 data.getLastTradedPrice(), data.getBestAskPrice(), data.getBestBidPrice());
                 writer.updateRealTimeQuote(realTimeQuote);
             } catch (Exception e) {
@@ -39,7 +43,7 @@ public class BinanceBaseSocketClient extends BaseSocketClient {
     }
 
     @Override
-    protected String buildSubscription(Set<Symbol> symbols) {
+    protected String buildSubscription(Symbol[] symbols) {
         try {
             List<String> list = new ArrayList<>();
             for (Symbol s : symbols) {

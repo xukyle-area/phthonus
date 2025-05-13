@@ -2,8 +2,7 @@ package com.gantenx.phthonus.socket;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gantenx.phthonus.infrastructure.config.SymbolConfig;
-import com.gantenx.phthonus.infrastructure.commons.model.Symbol;
+import com.gantenx.phthonus.infrastructure.commons.enums.Symbol;
 import com.gantenx.phthonus.infrastructure.dao.QuoteWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
@@ -11,7 +10,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Set;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -31,18 +29,18 @@ public abstract class BaseSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake data) {
-        log.info("WebSocket 连接已打开!");
+        log.info("WebSocket connection opened!");
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
         log.info("Connection closed by {}, Code: {}, Reason: {}", (remote ? "remote peer" : "us"), code, reason);
-        log.info("WebSocket连接已关闭, 准备重新连接...");
+        log.info("WebSocket connection closed, preparing to reconnect...");
     }
 
     @Override
     public void onError(Exception ex) {
-        log.error("WebSocket连接发生错误...", ex);
+        log.error("Error occurred in WebSocket connection...", ex);
     }
 
     @Override
@@ -53,12 +51,11 @@ public abstract class BaseSocketClient extends WebSocketClient {
 
     protected abstract Consumer<String> getCallback();
 
-    protected abstract String buildSubscription(Set<Symbol> symbols);
+    protected abstract String buildSubscription(Symbol[] symbols);
 
     public void subscription() {
-        Set<Symbol> symbols = SymbolConfig.getSymbolsMap().keySet();
-        String subscription = buildSubscription(symbols);
-        log.info("WebSocket 订阅消息: {}", subscription);
+        String subscription = this.buildSubscription(Symbol.getAllSymbols());
+        log.info("WebSocket subscription: {}", subscription);
         this.send(subscription);
     }
 }

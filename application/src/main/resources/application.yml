@@ -1,0 +1,11 @@
+binance:
+  history:
+    enabled: true
+  socket:
+    enabled: true
+
+crypto:
+  history:
+    enabled: true
+  socket:
+    enabled: true

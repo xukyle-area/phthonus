@@ -6,22 +6,25 @@ import com.gantenx.phthonus.infrastructure.commons.utils.ThreadPool;
 import com.gantenx.phthonus.infrastructure.commons.utils.TimestampUtils;
 import com.gantenx.phthonus.infrastructure.dao.QuoteWriter;
 import okhttp3.OkHttpClient;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.gantenx.phthonus.infrastructure.commons.utils.TimestampUtils.MILLIS_OF_ONE_HOUR;
 
-
+@Component
 public abstract class HistoryQuoteHandler {
     private final static int PERIOD = 20 * 60 * 1000;
     protected static final OkHttpClient client = HttpFactory.getInstance().getSharedClient();
     protected static final QuoteWriter writer = new QuoteWriter();
     protected static final Map<Market, Long> executeRecordMap = new HashMap<>();
 
-
-    public HistoryQuoteHandler() {
+    @PostConstruct
+    public void init() {
+        this.handleHistory();
         this.scheduleConnect();
     }
 
@@ -40,7 +43,6 @@ public abstract class HistoryQuoteHandler {
     public abstract void handleHistory();
 
     public void scheduleConnect() {
-        this.handleHistory();
         long initialDelay = TimestampUtils.millisecondsUntilUTCHour(1);
         ThreadPool.scheduleWithFixedDelay(this::handleHistory, initialDelay, PERIOD, TimeUnit.SECONDS);
     }

@@ -2,19 +2,17 @@ package com.gantenx.phthonus.socket;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import com.gantenx.phthonus.infrastructure.commons.enums.Market;
+import com.gantenx.phthonus.infrastructure.commons.enums.Symbol;
 import com.gantenx.phthonus.infrastructure.commons.model.CryptoEvent;
 import com.gantenx.phthonus.infrastructure.commons.model.CryptoRequest;
 import com.gantenx.phthonus.infrastructure.commons.model.RealTimeQuote;
-import com.gantenx.phthonus.infrastructure.commons.model.Symbol;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -51,8 +49,10 @@ public class CryptoBaseSocketClient extends BaseSocketClient {
                 CryptoEvent cryptoEvent = mapper.readValue(text, CryptoEvent.class);
                 CryptoEvent.Dat data = cryptoEvent.getResult().getData()[0];
                 String symbol = cryptoEvent.getResult().getSubscription();
+                symbol = symbol.replace("ticker.", "");
+                Symbol symbolEnum = Symbol.findBySymbolWithSubline(symbol);
                 RealTimeQuote realTimeQuote =
-                        new RealTimeQuote(symbol, System.currentTimeMillis(), Market.CRYPTO_COM,
+                        new RealTimeQuote(symbolEnum, System.currentTimeMillis(), Market.CRYPTO_COM,
                                 data.getLast(), data.getAsk(), data.getBid());
                 writer.updateRealTimeQuote(realTimeQuote);
             } catch (Exception e) {
@@ -62,7 +62,7 @@ public class CryptoBaseSocketClient extends BaseSocketClient {
     }
 
     @Override
-    protected String buildSubscription(Set<Symbol> symbols) {
+    protected String buildSubscription(Symbol[] symbols) {
         try {
             ArrayList<String> channels = new ArrayList<>();
             for (Symbol s : symbols) {

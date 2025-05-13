@@ -3,16 +3,9 @@ package com.gantenx.phthonus.infrastructure.commons.utils;
 public class TimestampUtils {
     public static final long MILLIS_OF_ONE_DAY = 24 * 60 * 60 * 1000;
     public static final long MILLIS_OF_ONE_HOUR = 60 * 60 * 1000;
-    public static final int DAY_SEC = 60 * 60 * 24;
-    public static final int period = 20 * 60 * 1000;
-    public static final int initialDelay = 0;
 
     public static long midnightTimestampToday() {
         return System.currentTimeMillis() / MILLIS_OF_ONE_DAY * MILLIS_OF_ONE_DAY;
-    }
-
-    public static long midnightTimestampOf(long ts) {
-        return ts / MILLIS_OF_ONE_DAY * MILLIS_OF_ONE_DAY;
     }
 
     /**
