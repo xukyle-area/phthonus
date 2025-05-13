@@ -36,3 +36,4 @@ build/
 logs/
 ### Mac OS ###
 .DS_Store
+.idea
