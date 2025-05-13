@@ -8,9 +8,9 @@
 
     <!-- 定义按日期滚动的文件 appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>~/logs/phthonus/application.log</file>
+        <file>logs/phthonus/application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>~/logs/phthonus-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/phthonus-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
