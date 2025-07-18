@@ -1,0 +1,14 @@
+# sandbox
+# kafka.bootstrap-servers: yax-dt2-sandbox01-kafka-main0-1.exodushk.com:9092
+# aws2
+
+binance:
+  socket:
+    enabled: true
+  history:
+    enabled: true
+crypto:
+  socket:
+    enabled: true
+  history:
+    enabled: true

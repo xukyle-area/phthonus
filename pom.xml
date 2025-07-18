@@ -13,13 +13,6 @@
     <groupId>com.gantenx.phthonus</groupId>
     <artifactId>phthonus</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>web-socket</module>
-        <module>history</module>
-        <module>application</module>
-        <module>infrastructure</module>
-    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -28,6 +21,16 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.tiger.exodus</groupId>
+            <artifactId>exodus-proto</artifactId>
+            <version>1.2.37</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.21.7</version>
+        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
