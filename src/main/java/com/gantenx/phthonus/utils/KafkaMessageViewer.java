@@ -35,8 +35,20 @@ public class KafkaMessageViewer {
     public static void main(String[] args) {
         PropertyUtils.initLogLevel();
 
-        String topic = "trades-dt2";
-        KafkaMessageViewer.viewKafkaMessages(Environment.AWS1.getKafkaBootstrapServers(), topic);
+        String topic = "pre-trade-context-snapshot";
+        String bootstrapServers = Environment.AWS2.getKafkaBootstrapServers();
+        
+        System.out.println("开始连接 Kafka 集群: " + bootstrapServers);
+        System.out.println("准备创建或检查 Topic: " + topic);
+        
+        KafkaMessageViewer.createTopicIfNotExists(bootstrapServers, topic, 1, (short) 1);
+        
+        System.out.println("\n是否要查看 Topic 中的消息？");
+        System.out.println("请取消注释以下行来查看消息：");
+        System.out.println("KafkaMessageViewer.viewKafkaMessages(\"" + bootstrapServers + "\", \"" + topic + "\");");
+        
+        // 要查看消息，取消下面这行的注释
+        // KafkaMessageViewer.viewKafkaMessages(bootstrapServers, topic);
     }
 
     public static void createTopicIfNotExists(String bootstrapServers, String topic, int numPartitions, short replicationFactor) {

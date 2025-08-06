@@ -3,7 +3,6 @@ package com.gantenx.phthonus.utils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.FlushMode;
 import redis.clients.jedis.Tuple;
 import java.util.*;
 

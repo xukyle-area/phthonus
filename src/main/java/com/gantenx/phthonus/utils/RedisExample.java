@@ -45,23 +45,7 @@ public class RedisExample {
      * String 操作示例
      */
     private static void stringOperations() {
-        System.out.println("\n--- String 操作示例 ---");
-        
-        // 设置值
-        RedisUtils.set("user:1:name", "张三");
-        RedisUtils.setex("user:1:session", 3600, "session_token_123");
-        
-        // 获取值
-        String name = RedisUtils.get("user:1:name");
-        System.out.println("用户名: " + name);
-        
-        // 原子递增
-        Long count = RedisUtils.incr("counter");
-        System.out.println("计数器: " + count);
-        
-        // 检查键是否存在
-        Boolean exists = RedisUtils.exists("user:1:name");
-        System.out.println("键是否存在: " + exists);
+
     }
     
     /**
