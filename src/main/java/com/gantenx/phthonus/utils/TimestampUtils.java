@@ -1,6 +1,55 @@
 package com.gantenx.phthonus.utils;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * 时间戳工具类
+ */
 public class TimestampUtils {
+    private static final ZoneId SHANGHAI_ZONE = ZoneId.of("Asia/Shanghai");
+    private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+    /**
+     * 将时间戳转换为上海时区（UTC+8）的格式化字符串
+     * @param timestamp 时间戳
+     * @param <T> 数字类型（Long, Integer, Double等）
+     * @return 格式化的时间字符串
+     */
+    public static <T extends Number> String formatTimestamp(T timestamp) {
+        return formatTimestamp(timestamp, DEFAULT_FORMATTER);
+    }
+
+    /**
+     * 将时间戳转换为上海时区（UTC+8）的格式化字符串，使用指定的格式
+     * @param timestamp 时间戳
+     * @param formatter 时间格式
+     * @param <T> 数字类型（Long, Integer, Double等）
+     * @return 格式化的时间字符串
+     */
+    public static <T extends Number> String formatTimestamp(T timestamp, DateTimeFormatter formatter) {
+        long millis = timestamp.longValue();
+        Instant instant = Instant.ofEpochMilli(millis);
+        ZonedDateTime zonedDateTime = instant.atZone(SHANGHAI_ZONE);
+        return zonedDateTime.format(formatter);
+    }
+
+    /**
+     * 将时间戳转换为指定时区的格式化字符串
+     * @param timestamp 时间戳
+     * @param zoneId 时区
+     * @param formatter 时间格式
+     * @param <T> 数字类型（Long, Integer, Double等）
+     * @return 格式化的时间字符串
+     */
+    public static <T extends Number> String formatTimestamp(T timestamp, ZoneId zoneId, DateTimeFormatter formatter) {
+        long millis = timestamp.longValue();
+        Instant instant = Instant.ofEpochMilli(millis);
+        ZonedDateTime zonedDateTime = instant.atZone(zoneId);
+        return zonedDateTime.format(formatter);
+    }
     public static final long MILLIS_OF_ONE_DAY = 24 * 60 * 60 * 1000;
     public static final long MILLIS_OF_ONE_HOUR = 60 * 60 * 1000;
     public static final int DAY_SEC = 60 * 60 * 24;
