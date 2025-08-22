@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 时间戳工具类
@@ -50,6 +52,7 @@ public class TimestampUtils {
         ZonedDateTime zonedDateTime = instant.atZone(zoneId);
         return zonedDateTime.format(formatter);
     }
+
     public static final long MILLIS_OF_ONE_DAY = 24 * 60 * 60 * 1000;
     public static final long MILLIS_OF_ONE_HOUR = 60 * 60 * 1000;
     public static final int DAY_SEC = 60 * 60 * 24;
@@ -84,5 +87,15 @@ public class TimestampUtils {
         long todayUTC_N = midnightTimestampToday() + MILLIS_OF_ONE_HOUR * n;
         long leftMilliseconds = todayUTC_N - System.currentTimeMillis();
         return leftMilliseconds > 0 ? leftMilliseconds : leftMilliseconds + MILLIS_OF_ONE_DAY;
+    }
+
+    public static void main(String[] args) {
+        String quoteCurrency = "HKD";
+        Set<String> currencies = new HashSet<>();
+        currencies.add("USD");
+        currencies.add("EUR");
+        currencies.add("GBP");
+        String format = String.format("quote: %s, currencies: %s", quoteCurrency, currencies);
+        System.out.println(format);
     }
 }
