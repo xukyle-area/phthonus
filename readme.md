@@ -68,10 +68,9 @@ src/main/java/com/gantenx/phthonus/
 
 ## 🔧 环境要求
 
-- **JDK**: 8 或更高版本
-- **Maven**: 3.6+ 
+- **JDK**: 8+
+- **Maven**: 3.6+
 - **Kafka**: 用于消息队列（可选）
-- **内存**: 建议 2GB 以上
 
 ## 🚀 快速开始
 
@@ -107,49 +106,18 @@ crypto.history.enabled: true
 mvn spring-boot:run
 ```
 
-或者运行编译后的 JAR：
-
-```bash
-java -jar target/phthonus-1.0-SNAPSHOT.jar
-```
-
 ## ⚙️ 配置说明
 
-### 环境配置
+项目支持多环境配置（AWS1、AWS2、LOCAL），可在 `Environment` 枚举中进行配置。
 
-项目支持多环境配置，可在 `Environment` 枚举中配置不同环境的参数：
+如需启用 Kafka 功能，请确保 Kafka 服务正在运行并配置正确的服务器地址。
 
-- `AWS1`: AWS 环境 1
-- `AWS2`: AWS 环境 2  
-- `LOCAL`: 本地环境
+## 🔍 主要功能模块
 
-### Kafka 配置
-
-如需启用 Kafka 功能，请确保：
-
-1. Kafka 服务正在运行
-2. 在 `Environment` 枚举中配置正确的 Kafka 服务器地址
-3. 确保主题已创建或开启自动创建主题功能
-
-## 🔍 使用示例
-
-### 查看 Kafka 消息
-
-```java
-// 查看指定主题的消息
-KafkaMessageViewer.viewKafkaMessages(
-    Environment.AWS1.getKafkaBootstrapServers(), 
-    Constant.ONGOING_KAFKA_TOPIC
-);
-```
-
-### 创建 WebSocket 连接
-
-```java
-// 创建 Binance WebSocket 连接
-BinanceSocketClient client = new BinanceSocketClient();
-client.connect();
-```
+- **WebSocket 客户端**: 支持 Binance、Crypto.com、HashKey 等交易所的实时数据订阅
+- **历史数据处理**: 获取和分析历史交易数据
+- **Kafka 集成**: 消息队列处理和数据分发
+- **多环境支持**: 灵活的环境配置管理
 
 ## 📊 支持的交易所
 
@@ -179,32 +147,20 @@ client.connect();
 
 ## 📝 开发指南
 
-### 添加新的交易所支持
+### 添加新交易所支持
 
-1. 在 `model/websocket/` 下创建新的消息模型
-2. 继承 `BaseSocketClient` 创建新的 Socket 客户端
-3. 在 `enums/Market.java` 中添加新的市场定义
+1. 在 `model/websocket/` 下创建消息模型
+2. 继承 `BaseSocketClient` 创建 Socket 客户端
+3. 在 `enums/Market.java` 中添加市场定义
 4. 实现相应的历史数据处理器
-
-### 贡献代码
-
-1. Fork 项目
-2. 创建特性分支: `git checkout -b feature/AmazingFeature`
-3. 提交变更: `git commit -m 'Add some AmazingFeature'`
-4. 推送分支: `git push origin feature/AmazingFeature`
-5. 提交 Pull Request
-
-## 📄 许可证
-
-此项目采用 MIT 许可证 - 详情请查看 [LICENSE](LICENSE) 文件。
-
-## 👥 维护者
-
-- [@xukyle-area](https://github.com/xukyle-area)
 
 ## 🤝 贡献
 
 欢迎提交 Issues 和 Pull Requests！
+
+## 👥 维护者
+
+[@xukyle-area](https://github.com/xukyle-area)
 
 ---
 
