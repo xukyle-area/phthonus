@@ -10,7 +10,7 @@ Phthonus 是一个高性能的加密货币实时数据处理平台，基于 Spri
 - **实时数据流**: 基于 WebSocket 的实时数据订阅
 - **消息队列**: 使用 Kafka 进行数据流处理和分发
 - **历史数据处理**: 支持历史交易数据的获取和分析
-- **多环境配置**: 支持 AWS、本地等多种部署环境
+- **灵活配置**: 支持多种配置参数和部署选项
 - **高并发处理**: 基于线程池的异步数据处理
 
 ## 🛠️ 技术栈
@@ -35,7 +35,6 @@ src/main/java/com/gantenx/phthonus/
 ├── constants/                        # 常量定义
 │   └── Constant.java                 # 系统常量
 ├── enums/                           # 枚举类
-│   ├── Environment.java             # 环境枚举
 │   ├── Market.java                  # 市场枚举
 │   └── Symbol.java                  # 交易对枚举
 ├── history/                         # 历史数据处理
@@ -108,7 +107,7 @@ mvn spring-boot:run
 
 ## ⚙️ 配置说明
 
-项目支持多环境配置（AWS1、AWS2、LOCAL），可在 `Environment` 枚举中进行配置。
+项目配置主要通过 `application.yaml` 文件进行管理。
 
 如需启用 Kafka 功能，请确保 Kafka 服务正在运行并配置正确的服务器地址。
 
@@ -117,7 +116,7 @@ mvn spring-boot:run
 - **WebSocket 客户端**: 支持 Binance、Crypto.com、HashKey 等交易所的实时数据订阅
 - **历史数据处理**: 获取和分析历史交易数据
 - **Kafka 集成**: 消息队列处理和数据分发
-- **多环境支持**: 灵活的环境配置管理
+- **配置管理**: 灵活的应用配置和参数管理
 
 ## 📊 支持的交易所
 
