@@ -10,7 +10,7 @@ public enum Environment {
             "yax-dt2-redis-cluster-0.exodushk.com"),
     AWS2(
             "aws2",
-            "10.251.64.235:9092",
+            "10.251.64.224:9092",
             "redis-cluster.exodus-aws2.svc.cluster.local"),
     SANDBOX(
             "sandbox",

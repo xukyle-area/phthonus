@@ -33,9 +33,11 @@ public class SocketTask {
         try {
             log.info("try to connect websocket of {}", type);
             if (type.equals(Market.BINANCE)) {
-                nextClient = new BinanceBaseSocketClient();
+                nextClient = new BinanceSocketClient();
             } else if (type.equals(Market.CRYPTO_COM)) {
-                nextClient = new CryptoBaseSocketClient();
+                nextClient = new CryptoSocketClient();
+            } else if (type.equals(Market.HASHKEY)) {
+                nextClient = new HashkeySocketClient();
             } else {
                 log.error("Unsupported QuoteEnum type: {}", type);
                 return;

@@ -8,13 +8,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SocketConfiguration {
 
-    @Bean
-    public SocketTask binanceSocketTask() {
-        return new SocketTask(Market.BINANCE);
-    }
+    // @Bean
+    // public SocketTask binanceSocketTask() {
+    //     return new SocketTask(Market.BINANCE);
+    // }
+
+    // @Bean
+    // public SocketTask cryptoSocketTask() {
+    //     return new SocketTask(Market.CRYPTO_COM);
+    // }
 
     @Bean
-    public SocketTask cryptoSocketTask() {
-        return new SocketTask(Market.CRYPTO_COM);
+    public SocketTask hashSocketTask() {
+        return new SocketTask(Market.HASHKEY);
     }
 }

@@ -27,46 +27,7 @@ import redis.clients.jedis.Tuple;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RedisUtils {
-    private static final String DEFAULT_HOST = "localhost";
-    private static final int DEFAULT_PORT = 6379;
     private static final int DEFAULT_TIMEOUT = 2000;
-    private static final int DEFAULT_DATABASE = 0;
-
-
-    public static void main(String[] args) {
-        try {
-            // 初始化连接
-            RedisUtils.init(Environment.AWS1.getRedisCluster(), 6379, null, 0);
-
-            // 使用KeyGenerator生成key
-            String key = RedisKeyGenerator.generateTradeCacheKey(1);
-
-            // 删除前数量
-            Long before;
-            Set<String> oldMembers;
-            Set<Tuple> oldTuples;
-            try (Jedis jedis = getJedis()) {
-                before = jedis.zcard(key);
-                System.out.println("删除前数量: " + before);
-
-                oldMembers = jedis.zrange(key, 0, 100);
-                if (!oldMembers.isEmpty()) {
-                    jedis.zrem(key, oldMembers.toArray(new String[0]));
-                }
-                oldTuples = jedis.zrangeWithScores(key, 0, 100);
-                if (!oldTuples.isEmpty()) {
-                    byte[][] members = oldTuples.stream().map(Tuple::getBinaryElement).toArray(byte[][]::new);
-                    jedis.zrem(key.getBytes(), members);
-                }
-                // 删除后数量
-                Long after = jedis.zcard(key);
-                System.out.println("删除后数量: " + after);
-            }
-        } finally {
-            RedisUtils.close();
-        }
-    }
-
 
     private static JedisPool jedisPool;
 
@@ -89,7 +50,6 @@ public class RedisUtils {
         }
     }
 
-
     /**
      * 获取Jedis连接
      */
@@ -103,6 +63,35 @@ public class RedisUtils {
     public static void close() {
         if (jedisPool != null) {
             jedisPool.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            // 初始化连接
+            RedisUtils.init(Environment.AWS1.getRedisCluster(), 6379, null, 0);
+
+            // 使用KeyGenerator生成key
+            String key = RedisKeyGenerator.generateTradeCacheKey(2);
+
+            // 删除前数量
+            Long before;
+
+            Set<Tuple> oldTuples;
+            try (Jedis jedis = getJedis()) {
+                before = jedis.zcard(key);
+                System.out.println("删除前数量: " + before);
+                oldTuples = jedis.zrangeWithScores(key, 0, 1000);
+                if (!oldTuples.isEmpty()) {
+                    byte[][] members = oldTuples.stream().map(Tuple::getBinaryElement).toArray(byte[][]::new);
+                    jedis.zrem(key.getBytes(), members);
+                }
+                // 删除后数量
+                Long after = jedis.zcard(key);
+                System.out.println("删除后数量: " + after);
+            }
+        } finally {
+            RedisUtils.close();
         }
     }
 }
