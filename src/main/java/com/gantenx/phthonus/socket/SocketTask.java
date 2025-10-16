@@ -1,6 +1,5 @@
 package com.gantenx.phthonus.socket;
 
-import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.utils.ThreadPool;
@@ -31,18 +30,15 @@ public class SocketTask {
         BaseSocketClient nextClient;
         try {
             log.info("try to connect websocket of {}", type);
-            if (type.equals(Market.BINANCE)) {
-                nextClient = new BinanceSocketClient();
-            } else if (type.equals(Market.CRYPTO_COM)) {
-                nextClient = new CryptoSocketClient();
-            } else if (type.equals(Market.HASHKEY)) {
-                nextClient = new HashkeySocketClient();
-            } else {
-                log.error("Unsupported QuoteEnum type: {}", type);
+            String socketClient = type.getSocketClient();
+            Class<?> clazz = Class.forName(socketClient);
+            if (!BaseSocketClient.class.isAssignableFrom(clazz)) {
+                log.error("Class {} is not a subclass of BaseSocketClient", socketClient);
                 return;
             }
-        } catch (URISyntaxException e) {
-            log.error("URL format is invalid!", e);
+            nextClient = (BaseSocketClient) clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            log.error("Error creating websocket client: {}", e.getMessage(), e);
             return;
         }
         log.info("build websocket client success, websocket of {}", type);

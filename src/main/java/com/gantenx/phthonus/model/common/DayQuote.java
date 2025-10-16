@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DayHistoryQuote {
+public class DayQuote {
     private Symbol symbol;
     private long timestamp;
     @NotNull

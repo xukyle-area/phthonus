@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.common.DayHistoryQuote;
+import com.gantenx.phthonus.model.common.DayQuote;
 import com.gantenx.phthonus.utils.TimestampUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
@@ -40,10 +40,10 @@ public class CryptoHandler extends HistoryQuoteHandler {
                     JSONObject candle = data.getJSONObject(data.length() - 3 + i);
                     long time = candle.getLong("t");
                     if (time == TimestampUtils.midnightTimestampBefore(2 - i)) {
-                        DayHistoryQuote quote =
-                                new DayHistoryQuote(symbol, time, Market.CRYPTO_COM, candle.getString("c"));
+                        DayQuote quote = new DayQuote(symbol, time, Market.CRYPTO_COM, candle.getString("c"));
+                        log.info("handle crypto dayQuote:{}", quote);
                     } else {
-                        log.error("handle crypto dayHistoryQuote{} error.", symbol);
+                        log.error("handle crypto dayQuote for {} error.", symbol);
                     }
                 }
                 executeRecordMap.put(Market.CRYPTO_COM, System.currentTimeMillis());

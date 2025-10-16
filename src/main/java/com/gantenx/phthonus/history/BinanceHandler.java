@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.common.DayHistoryQuote;
+import com.gantenx.phthonus.model.common.DayQuote;
 import com.gantenx.phthonus.utils.TimestampUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
@@ -36,7 +36,8 @@ public class BinanceHandler extends HistoryQuoteHandler {
                     JSONArray candle = new JSONArray(body).getJSONArray(i);
                     long time = candle.getLong(0);
                     if (time == TimestampUtils.midnightTimestampBefore(2 - i)) {
-                        DayHistoryQuote quote = new DayHistoryQuote(symbol, time, Market.BINANCE, candle.getString(4));
+                        DayQuote quote = new DayQuote(symbol, time, Market.BINANCE, candle.getString(4));
+                        log.info("handle binance dayQuote: {}", quote);
                     } else {
                         log.error("time {} error. {}", time, symbol);
                     }
