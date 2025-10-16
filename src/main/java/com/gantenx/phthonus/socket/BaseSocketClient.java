@@ -1,7 +1,6 @@
 package com.gantenx.phthonus.socket;
 
 import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.service.KafkaSender;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -14,7 +13,6 @@ import java.util.function.Consumer;
 public abstract class BaseSocketClient extends WebSocketClient {
 
     protected static long id = 1L;
-    protected final KafkaSender kafkaSender = KafkaSender.getInstance();
 
     public BaseSocketClient(String serverUri) throws URISyntaxException {
         super(new URI(serverUri));

@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.model.websocket;
+package com.gantenx.phthonus.model.websocket.binance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

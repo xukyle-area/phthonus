@@ -1,11 +1,10 @@
 package com.gantenx.phthonus.socket;
 
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.utils.ThreadPool;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SocketTask {

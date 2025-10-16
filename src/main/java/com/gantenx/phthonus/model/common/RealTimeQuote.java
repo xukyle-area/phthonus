@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.model.websocket;
+package com.gantenx.phthonus.model.common;
 
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.enums.Symbol;

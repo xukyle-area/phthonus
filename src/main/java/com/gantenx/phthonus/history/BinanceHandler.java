@@ -1,17 +1,16 @@
 package com.gantenx.phthonus.history;
 
 
-import com.gantenx.phthonus.enums.Market;
-import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.websocket.DayHistoryQuote;
-import com.gantenx.phthonus.utils.TimestampUtils;
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.Request;
+import java.util.Objects;
 import org.json.JSONArray;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
+import com.gantenx.phthonus.enums.Market;
+import com.gantenx.phthonus.enums.Symbol;
+import com.gantenx.phthonus.model.common.DayHistoryQuote;
+import com.gantenx.phthonus.utils.TimestampUtils;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.Request;
 
 @Slf4j
 @Service

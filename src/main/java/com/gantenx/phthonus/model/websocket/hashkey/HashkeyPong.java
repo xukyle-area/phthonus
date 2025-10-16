@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.model.websocket;
+package com.gantenx.phthonus.model.websocket.hashkey;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

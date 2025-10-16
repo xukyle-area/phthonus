@@ -1,21 +1,18 @@
 package com.gantenx.phthonus.socket;
 
-
-import com.gantenx.phthonus.enums.Market;
-import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.websocket.BinanceEvent;
-import com.gantenx.phthonus.model.websocket.BinanceRequest;
-import com.gantenx.phthonus.model.websocket.BinanceTicker;
-import com.gantenx.phthonus.model.websocket.RealTimeQuote;
-import com.gantenx.phthonus.utils.JsonUtils;
-import lombok.extern.slf4j.Slf4j;
-
+import static com.gantenx.phthonus.constants.Constant.BINANCE_SUBSCRIBE;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-
-import static com.gantenx.phthonus.constants.Constant.*;
+import com.gantenx.phthonus.enums.Market;
+import com.gantenx.phthonus.enums.Symbol;
+import com.gantenx.phthonus.model.common.RealTimeQuote;
+import com.gantenx.phthonus.model.websocket.binance.BinanceEvent;
+import com.gantenx.phthonus.model.websocket.binance.BinanceRequest;
+import com.gantenx.phthonus.model.websocket.binance.BinanceTicker;
+import com.gantenx.phthonus.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BinanceSocketClient extends BaseSocketClient {
@@ -39,7 +36,6 @@ public class BinanceSocketClient extends BaseSocketClient {
                 realTimeQuote.setLast(data.getLastTradedPrice());
                 realTimeQuote.setBid(data.getBestBidPrice());
                 realTimeQuote.setMarket(Market.BINANCE);
-                kafkaSender.send(KAFKA_TOPIC, MQTT_TOPIC_REALTIME_QUOTE, realTimeQuote);
             } catch (Exception e) {
                 log.error("error during sink.{}", text, e);
             }

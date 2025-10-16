@@ -1,7 +1,7 @@
 package com.gantenx.phthonus.utils;
 
-import com.google.protobuf.GeneratedMessageV3;
 import org.apache.kafka.common.serialization.Serializer;
+import com.google.protobuf.GeneratedMessageV3;
 
 public class ProtoSerializer<T extends GeneratedMessageV3> implements Serializer<T> {
     @Override

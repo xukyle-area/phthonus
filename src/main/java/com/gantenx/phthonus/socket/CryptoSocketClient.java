@@ -1,22 +1,22 @@
 package com.gantenx.phthonus.socket;
 
 
-import com.gantenx.phthonus.enums.Market;
-import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.websocket.CryptoEvent;
-import com.gantenx.phthonus.model.websocket.CryptoRequest;
-import com.gantenx.phthonus.model.websocket.RealTimeQuote;
-import com.gantenx.phthonus.utils.JsonUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
+import static com.gantenx.phthonus.constants.Constant.CHANNELS;
+import static com.gantenx.phthonus.constants.Constant.SUBSCRIBE;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import static com.gantenx.phthonus.constants.Constant.*;
+import org.springframework.stereotype.Service;
+import com.gantenx.phthonus.enums.Market;
+import com.gantenx.phthonus.enums.Symbol;
+import com.gantenx.phthonus.model.common.RealTimeQuote;
+import com.gantenx.phthonus.model.websocket.crypto.CryptoEvent;
+import com.gantenx.phthonus.model.websocket.crypto.CryptoRequest;
+import com.gantenx.phthonus.model.websocket.crypto.Dat;
+import com.gantenx.phthonus.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -43,7 +43,7 @@ public class CryptoSocketClient extends BaseSocketClient {
         return text -> {
             try {
                 CryptoEvent cryptoEvent = JsonUtils.readValue(text, CryptoEvent.class);
-                CryptoEvent.Dat data = cryptoEvent.getResult().getData()[0];
+                Dat data = cryptoEvent.getResult().getData()[0];
                 String symbol = cryptoEvent.getResult().getSubscription();
                 symbol = symbol.replace("ticker.", "");
                 Symbol symbolEnum = Symbol.findBySymbolWithSubline(symbol);
@@ -54,7 +54,8 @@ public class CryptoSocketClient extends BaseSocketClient {
                 realTimeQuote.setLast(data.getLast());
                 realTimeQuote.setBid(data.getBid());
                 realTimeQuote.setMarket(Market.CRYPTO_COM);
-                kafkaSender.send(KAFKA_TOPIC, MQTT_TOPIC_REALTIME_QUOTE, realTimeQuote);
+
+                
             } catch (Exception e) {
                 log.error("error during sink.{}", text, e);
             }

@@ -1,10 +1,9 @@
 package com.gantenx.phthonus.utils;
 
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
-
-import java.util.concurrent.TimeUnit;
 
 @Getter
 public final class HttpFactory {

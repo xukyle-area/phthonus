@@ -4,7 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Environment {
-    AWS1("aws1", "", ""), AWS2("aws2", "", ""), SANDBOX("sandbox", "", "");
+    AWS1("aws1", "", ""),
+    AWS2("aws2", "", ""),
+    SANDBOX("sandbox", "", "");
 
     private final String value;
     private final String kafkaBootstrapServers;

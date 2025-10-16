@@ -1,18 +1,17 @@
 package com.gantenx.phthonus.history;
 
-import com.gantenx.phthonus.enums.Market;
-import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.websocket.DayHistoryQuote;
-import com.gantenx.phthonus.utils.TimestampUtils;
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
+import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
+import com.gantenx.phthonus.enums.Market;
+import com.gantenx.phthonus.enums.Symbol;
+import com.gantenx.phthonus.model.common.DayHistoryQuote;
+import com.gantenx.phthonus.utils.TimestampUtils;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
 
 @Slf4j
 @Service
@@ -32,7 +31,8 @@ public class CryptoHandler extends HistoryQuoteHandler {
         Symbol[] symbols = Symbol.getAllSymbols();
         for (Symbol symbol : symbols) {
             try {
-                Request request = new Request.Builder().url(Market.CRYPTO_COM.getUrl() + symbol.getSymbolWithSubline()).get().build();
+                Request request = new Request.Builder().url(Market.CRYPTO_COM.getUrl() + symbol.getSymbolWithSubline())
+                        .get().build();
                 ResponseBody responseBody = client.newCall(request).execute().body();
                 String body = Objects.requireNonNull(responseBody).string();
                 JSONArray data = new JSONObject(body).getJSONObject("result").getJSONArray("data");
@@ -40,7 +40,8 @@ public class CryptoHandler extends HistoryQuoteHandler {
                     JSONObject candle = data.getJSONObject(data.length() - 3 + i);
                     long time = candle.getLong("t");
                     if (time == TimestampUtils.midnightTimestampBefore(2 - i)) {
-                        DayHistoryQuote quote = new DayHistoryQuote(symbol, time, Market.CRYPTO_COM, candle.getString("c"));
+                        DayHistoryQuote quote =
+                                new DayHistoryQuote(symbol, time, Market.CRYPTO_COM, candle.getString("c"));
                     } else {
                         log.error("handle crypto dayHistoryQuote{} error.", symbol);
                     }

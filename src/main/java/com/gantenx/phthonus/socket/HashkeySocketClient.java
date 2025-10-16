@@ -1,9 +1,6 @@
 package com.gantenx.phthonus.socket;
 
-
 import static com.gantenx.phthonus.constants.Constant.BINARY;
-import static com.gantenx.phthonus.constants.Constant.KAFKA_TOPIC;
-import static com.gantenx.phthonus.constants.Constant.MQTT_TOPIC_REALTIME_QUOTE;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Map;
@@ -11,7 +8,8 @@ import java.util.function.Consumer;
 import org.springframework.stereotype.Service;
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.enums.Symbol;
-import com.gantenx.phthonus.model.websocket.*;
+import com.gantenx.phthonus.model.common.RealTimeQuote;
+import com.gantenx.phthonus.model.websocket.hashkey.*;
 import com.gantenx.phthonus.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,23 +40,21 @@ public class HashkeySocketClient extends BaseSocketClient {
     @Override
     protected Consumer<String> getCallback() {
         return text -> {
-
-            log.info(text);
             try {
                 HashkeyEvent hashkeyEvent = JsonUtils.readValue(text, HashkeyEvent.class);
-                if(hashkeyEvent == null || hashkeyEvent.getData() == null || hashkeyEvent.getData().length == 0) {
+                if (hashkeyEvent == null || hashkeyEvent.getData() == null || hashkeyEvent.getData().length == 0) {
                     return;
                 }
-                HashkeyEvent.Data data = hashkeyEvent.getData()[0];
+                Data data = hashkeyEvent.getData()[0];
                 String symbol = hashkeyEvent.getSymbolName();
                 Symbol symbolEnum = Symbol.findBySymbolWithSubline(symbol);
                 RealTimeQuote realTimeQuote = new RealTimeQuote();
                 realTimeQuote.setSymbol(symbolEnum);
                 realTimeQuote.setTimestamp(System.currentTimeMillis());
                 realTimeQuote.setLast(data.getClose());
-                log.info("Hashkey real-time, symbol: {}, quote: {}", symbol, data.getClose());
                 realTimeQuote.setMarket(Market.HASHKEY);
-                kafkaSender.send(KAFKA_TOPIC, MQTT_TOPIC_REALTIME_QUOTE, realTimeQuote);
+
+                log.info("Hashkey real-time, symbol: {}, quote: {}", symbol, data.getClose());
             } catch (Exception e) {
                 log.error("error during sink.{}", text, e);
             }

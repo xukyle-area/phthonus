@@ -9,13 +9,12 @@ public class ThreadPool {
     private static final ScheduledExecutorService scheduledExecutor;
     private static final int POOL_SIZE = 3;
 
-    static{
+    static {
         scheduledExecutor = Executors.newScheduledThreadPool(POOL_SIZE);
     }
 
     // 私有构造函数，防止外部实例化
-    private ThreadPool() {
-    }
+    private ThreadPool() {}
 
     // 延迟执行任务
     public static void scheduleTask(Runnable task, long delay, TimeUnit unit) {

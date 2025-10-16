@@ -1,18 +1,16 @@
 package com.gantenx.phthonus.history;
 
+import static com.gantenx.phthonus.utils.TimestampUtils.MILLIS_OF_ONE_HOUR;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
 import com.gantenx.phthonus.enums.Market;
 import com.gantenx.phthonus.utils.HttpFactory;
 import com.gantenx.phthonus.utils.ThreadPool;
 import com.gantenx.phthonus.utils.TimestampUtils;
 import okhttp3.OkHttpClient;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import static com.gantenx.phthonus.utils.TimestampUtils.MILLIS_OF_ONE_HOUR;
 
 @Component
 public abstract class HistoryQuoteHandler {

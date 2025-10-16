@@ -1,7 +1,12 @@
 package com.gantenx.phthonus.utils;
 
-import com.gantenx.phthonus.constants.Constant;
-import com.gantenx.phthonus.enums.Environment;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -11,14 +16,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.TopicExistsException;
 import org.apache.kafka.common.serialization.StringDeserializer;
-
-import java.time.Duration;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Properties;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.gantenx.phthonus.constants.Constant;
+import com.gantenx.phthonus.enums.Environment;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Kafka消息查询工具
@@ -28,17 +28,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  * - org.slf4j:slf4j-api:1.7.36
  * - org.slf4j:slf4j-simple:1.7.36
  */
+@Slf4j
 public class KafkaMessageViewer {
 
     private final static boolean FROM_BEGINNING = true;
 
     public static void main(String[] args) {
         PropertyUtils.initLogLevel();
-        
+
         KafkaMessageViewer.viewKafkaMessages(Environment.AWS1.getKafkaBootstrapServers(), Constant.ONGOING_KAFKA_TOPIC);
     }
 
-    public static void createTopicIfNotExists(String bootstrapServers, String topic, int numPartitions, short replicationFactor) {
+    public static void createTopicIfNotExists(String bootstrapServers, String topic, int numPartitions,
+            short replicationFactor) {
         Properties props = new Properties();
         props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 
@@ -101,14 +103,14 @@ public class KafkaMessageViewer {
      * 打印单条消息记录
      */
     private static void printRecord(ConsumerRecord<String, String> record) {
-        System.out.println("----------------------------------------------");
-        System.out.println("主题: " + record.topic());
-        System.out.println("分区: " + record.partition());
-        System.out.println("偏移量: " + record.offset());
-        System.out.println("时间戳: " + new Date(record.timestamp()) + " (" + record.timestamp() + ")");
+        log.info("----------------------------------------------");
+        log.info("主题: {}", record.topic());
+        log.info("分区: {}", record.partition());
+        log.info("偏移量: {}", record.offset());
+        log.info("时间戳: {} ({})", new Date(record.timestamp()), record.timestamp());
         if (record.key() != null) {
-            System.out.println("键: " + record.key());
+            log.info("键: {}", record.key());
         }
-        System.out.println("值: " + record.value());
+        log.info("值: {}", record.value());
     }
 }

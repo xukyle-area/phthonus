@@ -1,4 +1,4 @@
-package com.gantenx.phthonus.model.websocket;
+package com.gantenx.phthonus.model.websocket.hashkey;
 
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -13,5 +13,5 @@ public class HashkeyRequest {
     private String topic = "realtimes";
     private String event = "sub";
     private Map<String, Object> params;
-    private long id = 1L;
+    private long id;
 }
