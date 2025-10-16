@@ -4,19 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Environment {
-    AWS1(
-            "aws1",
-            "yax-dt2-kafka0-1.exodushk.com:9092,yax-dt2-kafka0-2.exodushk.com:9092",
-            "yax-dt2-redis-cluster-0.exodushk.com"),
-    AWS2(
-            "aws2",
-            "10.251.64.224:9092",
-            "redis-cluster.exodus-aws2.svc.cluster.local"),
-    SANDBOX(
-            "sandbox",
-            "yax-dt2-sandbox01-kafka-main0-1.exodushk.com:9092",
-            ""
-            );
+    AWS1("aws1", "", ""), AWS2("aws2", "", ""), SANDBOX("sandbox", "", "");
 
     private final String value;
     private final String kafkaBootstrapServers;
